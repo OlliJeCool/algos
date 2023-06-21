@@ -53,7 +53,6 @@ const bellmanford = (G: number[][], start: number): number[] => {
 }
 
 
-
 const johnsons = (G: number[][]): number[][] => {
     const augmentedGraph: number[][] = [];
 
@@ -101,46 +100,16 @@ const johnsons = (G: number[][]): number[][] => {
     return shortestPaths;
 }
 
-console.table(johnsons(newMatrix));
 
-
-
-
-const matrixMultiplication = (A: number[][], B: number[][]): number[][] => {
-    const rowsA = A.length;
-    const colsA = A[0].length;
-    const colsB = B[0].length;
-  
-    const result: number[][] = [];
-  
-    for (let i = 0; i < rowsA; i++) {
-      result[i] = [];
-      for (let j = 0; j < colsB; j++) {
-        result[i][j] = 0;
-        for (let k = 0; k < colsA; k++) {
-          result[i][j] += A[i][k] * B[k][j];
+const floydWarshall = (G: number[][]): number[][] => {
+    for (let i = 0; i < G.length; i++) {
+        for (let j = 0; j < G.length; j++) {
+          for (let k = 0; k < G.length; k++) {
+            if (G[j][k] > G[j][i] + G[i][k]) {
+              G[j][k] = G[j][i] + G[i][k];
+            }
+          }
         }
       }
-    }
-  
-    return result;
+      return G;
 }
-
-const apsp = (adjMatrix: number[][]): number[][] => {
-    const V = adjMatrix.length;
-    let D: number[][] = [...adjMatrix];
-
-    for (let k = 0; k < V; k++) {
-    D = matrixMultiplication(D, adjMatrix);
-    for (let i = 0; i < V; i++) {
-      for (let j = 0; j < V; j++) {
-        D[i][j] = Math.min(D[i][j], D[i][k] + adjMatrix[k][j]);
-      }
-    }
-  }
-
-  return D;
-}
-
-
-console.table(apsp(newMatrix))
